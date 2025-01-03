@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7/framework7-bundle.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7-icons/css/framework7-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/framework7/framework7-bundle.min.js"></script>
+    <title>{{ page.title }}</title>
+</head>
+<body>
+    <div id="app">
+        <main class="view view-main">
+            <div class="page">
+                <div class="page-content">
+                    {{ content }}
+                </div>
+            </div>
+        </main>
+        <footer>
+        <div class="toolbar tabbar tabbar-icons toolbar-bottom">
+            <div class="toolbar-inner">
+              <a href="/index" class="tab-link tab-link-active">
+                <i class="icon f7-icons">house</i>
+              </a>
+              <a href="/about" class="tab-link">
+                <i class="icon f7-icons">info_circle</i>
+              </a>
+              <a href="/contact" class="tab-link">
+                <i class="icon f7-icons">phone</i>
+              </a>
+              <a href="/profile" class="tab-link">
+                <i class="icon f7-icons">gear</i>
+              </a>
+              <a href="/profile" class="tab-link">
+                <i class="icon f7-icons">person_circle</i>
+              </a>
+            </div>
+          </div>
+        </footer>
+    </div>
+    <script src="/assets/js/app.js"></script>
+</body>
+</html>
+

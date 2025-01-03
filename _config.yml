@@ -1,0 +1,4 @@
+title: My Jekyll PWA
+description: A simple PWA built with Jekyll and hosted on GitHub Pages.
+url: https://app.aiello.ch
+baseurl: ""
