@@ -1,0 +1,14 @@
+title: BlaBlaBla
+description: BlaBlaBla Chat
+baseurl: "" 
+url: "https://app.aiello.ch" 
+theme: minima
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# PWA-Konfiguration
+pwa:
+  manifest: /manifest.json
+  service_worker: /service-worker.js

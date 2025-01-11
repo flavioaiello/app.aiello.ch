@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{{ page.title | escape }} | {{ site.title }}</title>
+  
+  <!-- Jekyll SEO Tag -->
+  {% seo %}
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="{{ site.baseurl }}/manifest.json"/>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="{{ site.baseurl }}/assets/icons/192x192.png"/>
+  
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#ffffff"/>
+</head>
+<body>
+  <div class="container my-5">
+    {{ content }}
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <script type="module">
+    import { createOrbitDB } from 'https://esm.sh/@orbitdb/core@2.4.3';
+    import { createHelia } from 'https://esm.sh/helia@5.1.1';
+    import { createLibp2p } from 'https://esm.sh/libp2p@0.45.8';
+    import { gossipsub } from 'https://esm.sh/@chainsafe/libp2p-gossipsub@14.1.0';
+    import { identify } from 'https://esm.sh/@libp2p/identify@3.0.15';
+    import { noise } from 'https://esm.sh/@chainsafe/libp2p-noise@13.0.2';
+    import { yamux } from 'https://esm.sh/@chainsafe/libp2p-yamux@5.0.1';
+    import { webSockets } from 'https://esm.sh/@libp2p/websockets@4.0.4';
+    import { webTransport } from 'https://esm.sh/@libp2p/webtransport@2.2.0';
+    import { bootstrap } from 'https://esm.sh/@libp2p/bootstrap@7.1.16';
+  
+    window._OrbitDB = createOrbitDB;
+    window._Helia = createHelia;
+    window._Libp2p = createLibp2p;
+    window._GossipSub = gossipsub;
+    window._Identify = identify;
+    window._Noise = noise;
+    window._Yamux = yamux;
+    window._WebSockets = webSockets;
+    window._WebTransport = webTransport;
+    window._Bootstrap = bootstrap;
+
+  </script>
+
+  <!-- App Logic -->
+  <script type="module" src="{{ site.baseurl }}/assets/js/app.js"></script>
+  
+  <!-- Registriere Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('{{ site.baseurl }}/service-worker.js')
+          .then(reg => console.log('Service Worker registriert:', reg))
+          .catch(err => console.log('Service Worker Registrierung fehlgeschlagen:', err));
+      });
+    }
+  </script>
+</body>
+</html>
