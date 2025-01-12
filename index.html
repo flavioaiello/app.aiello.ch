@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OrbitDB PWA - A decentralized progressive web app using OrbitDB and Workbox.">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192x192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="icon-512x512.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
+  <title>OrbitDB PWA</title>
+</head>
+<body>
+  <div class="container my-5">
+    <h1 class="mb-4">Decentralized Chat with OrbitDB</h1>
+
+    <div id="status" class="alert alert-info">Initializing Chat...</div>
+
+    <!-- Chat Window -->
+    <div class="card">
+      <div class="card-body" id="chat-window" style="height: 400px; overflow-y: scroll;"></div>
+    </div>
+
+    <!-- Message Input -->
+    <div class="input-group mt-3">
+      <input type="text" id="messageInput" class="form-control" placeholder="Enter a message" />
+      <button id="sendButton" class="btn btn-primary">Send</button>
+    </div>
+
+    <!-- Username Modal -->
+    <div class="modal fade" id="usernameModal" tabindex="-1" aria-labelledby="usernameModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="usernameModalLabel">Set Username</h1>
+          </div>
+          <div class="modal-body">
+            <input type="text" id="usernameInput" class="form-control" placeholder="Your username" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="saveUsername" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
