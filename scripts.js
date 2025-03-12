@@ -1,6 +1,6 @@
 Office.onReady(function(info) {
     if (info.host === Office.HostType.Outlook) {
-        document.getElementById("start-button").onclick = startleaner;
+        document.getElementById("start-button").onclick = startLeaner;
     }
 });
 
@@ -27,15 +27,32 @@ async function getFolderIdByName(token, folderName) {
         headers: { "Authorization": "Bearer " + token }
     });
     const data = await response.json();
+
     if (data.value && data.value.length > 0) {
-        return data.value[0].id;
+        return data.value[0].id; // Folder found
     } else {
-        throw new Error(`Folder '${folderName}' not found.`);
+        // Create the folder if it doesn't exist
+        const createUrl = `${Office.context.mailbox.restUrl}/v2.0/me/mailFolders`;
+        const createResponse = await fetch(createUrl, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ displayName: folderName })
+        });
+        const createData = await createResponse.json();
+        if (createResponse.ok) {
+            log(`Created folder '${folderName}' successfully.`);
+            return createData.id;
+        } else {
+            throw new Error(`Failed to create folder '${folderName}': ${createData.error.message}`);
+        }
     }
 }
 
 async function getMessagesInFolder(token, folderId) {
-    const url = `${Office.context.mailbox.restUrl}/v2.0/me/mailFolders/${folderId}/messages?$select=id,internetMessageId`;
+    const url = `${Office.context.mailbox.restUrl}/v2.0/me/mailFolders/${folderId}/messages?$select=id,internetMessageId,subject`;
     const response = await fetch(url, {
         headers: { "Authorization": "Bearer " + token }
     });
@@ -93,6 +110,7 @@ async function getHeadersForMessages(token, messageIds) {
 
 async function moveMessages(token, messageIds, destinationFolderId) {
     const batchSize = 20;
+    let movedCount = 0;
     for (let i = 0; i < messageIds.length; i += batchSize) {
         const batchIds = messageIds.slice(i, i + batchSize);
         const requests = batchIds.map((id, index) => ({
@@ -102,7 +120,7 @@ async function moveMessages(token, messageIds, destinationFolderId) {
             body: { destinationId: destinationFolderId }
         }));
         const batchBody = { requests };
-        await fetch(`${Office.context.mailbox.restUrl}/v2.0/$batch`, {
+        const response = await fetch(`${Office.context.mailbox.restUrl}/v2.0/$batch`, {
             method: "POST",
             headers: {
                 "Authorization": "Bearer " + token,
@@ -110,36 +128,67 @@ async function moveMessages(token, messageIds, destinationFolderId) {
             },
             body: JSON.stringify(batchBody)
         });
+        const data = await response.json();
+        data.responses.forEach(resp => {
+            if (resp.status === 201) movedCount++;
+        });
     }
+    return movedCount;
 }
 
-async function startleaner() {
+async function startLeaner() {
     try {
         log("Starting leaner process...");
         const token = await getAccessToken();
         const inboxFolderId = "inbox";
-        const archiveFolderId = await getFolderIdByName(token, "Archive");
+
+        // Get or create the Archive folder
+        let archiveFolderId;
+        try {
+            archiveFolderId = await getFolderIdByName(token, "Archive");
+        } catch (error) {
+            log(`Error: ${error.message}`);
+            return;
+        }
+
         const messages = await getAllMessages(token, inboxFolderId);
         log(`Found ${messages.length} messages.`);
+
         if (messages.length === 0) {
             log("No messages to process.");
             return;
         }
+
+        // Traverse and log message details
+        log("Traversing messages:");
+        messages.forEach((msg, index) => {
+            log(`Message ${index + 1}: ID=${msg.id}, Subject="${msg.subject || 'No subject'}"`);
+        });
+
         const headersList = await getHeadersForMessages(token, messages.map(m => m.id));
         const referencedIds = new Set();
-        headersList.forEach(headers => {
-            headers.forEach(header => {
-                if (header.name === "References" || header.name === "In-Reply-To") {
-                    const ids = header.value.split(" ").filter(id => id);
-                    ids.forEach(id => referencedIds.add(id));
-                }
-            });
+        headersList.forEach((headers, index) => {
+            if (headers) {
+                headers.forEach(header => {
+                    if (header.name === "References" || header.name === "In-Reply-To") {
+                        const ids = header.value.split(" ").filter(id => id);
+                        ids.forEach(id => referencedIds.add(id));
+                        log(`Message ${index + 1}: Found references - ${header.value}`);
+                    }
+                });
+            }
         });
-        const messagesToArchive = messages.filter(m => referencedIds.has(m.internetMessageId));
+
+        const messagesToArchive = messages.filter((m, index) => {
+            const willArchive = referencedIds.has(m.internetMessageId);
+            log(`Message ${index + 1}: "${m.subject || 'No subject'}" - ${willArchive ? "To be archived" : "Stays in Inbox"}`);
+            return willArchive;
+        });
+
         log(`Found ${messagesToArchive.length} messages to archive.`);
         if (messagesToArchive.length > 0) {
-            await moveMessages(token, messagesToArchive.map(m => m.id), archiveFolderId);
-            log(`Archived ${messagesToArchive.length} messages.`);
+            const movedCount = await moveMessages(token, messagesToArchive.map(m => m.id), archiveFolderId);
+            log(`Archived ${movedCount} messages.`);
         } else {
             log("No messages to archive.");
         }
