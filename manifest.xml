@@ -6,8 +6,8 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="leaner" />
   <Description DefaultValue="Performs leaner tasks on your emails." />
-  <IconUrl DefaultValue="https://app.aiello.ch/leaner/assets/icon-64.png" />
-  <SupportUrl DefaultValue="https://github.com/yourusername/leaner/issues" />
+  <IconUrl DefaultValue="https://app.aiello.ch/assets/icon-64.png" />
+  <SupportUrl DefaultValue="https://github.com/flavioaiello/app.aiello.ch/issues" />
   <AppDomains>
     <AppDomain>https://outlook.office.com</AppDomain>
   </AppDomains>
@@ -22,7 +22,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://app.aiello.ch/leaner/index.html" />
+        <SourceLocation DefaultValue="https://app.aiello.ch/index.html" />
       </DesktopSettings>
     </Form>
   </FormSettings>
@@ -68,13 +68,13 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="icon16" DefaultValue="https://app.aiello.ch/leaner/assets/icon-16.png" />
-        <bt:Image id="icon32" DefaultValue="https://app.aiello.ch/leaner/assets/icon-32.png" />
-        <bt:Image id="icon80" DefaultValue="https://app.aiello.ch/leaner/assets/icon-80.png" />
+        <bt:Image id="icon16" DefaultValue="https://app.aiello.ch/assets/icon-16.png" />
+        <bt:Image id="icon32" DefaultValue="https://app.aiello.ch/assets/icon-32.png" />
+        <bt:Image id="icon80" DefaultValue="https://app.aiello.ch/assets/icon-80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="residFunctionFile" DefaultValue="https://app.aiello.ch/leaner/index.html" />
-        <bt:Url id="readTaskPaneUrl" DefaultValue="https://app.aiello.ch/leaner/index.html" />
+        <bt:Url id="residFunctionFile" DefaultValue="https://app.aiello.ch/index.html" />
+        <bt:Url id="readTaskPaneUrl" DefaultValue="https://app.aiello.ch/index.html" />
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="groupLabel" DefaultValue="leaner" />
