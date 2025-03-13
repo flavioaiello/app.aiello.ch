@@ -9,7 +9,7 @@
   <ProviderName>Aiello</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="New Email Time Notifier"/>
-  <Description DefaultValue="Shows current time when new email arrives"/>
+  <Description DefaultValue="Shows current time when new email arrives or on demand"/>
   <IconUrl DefaultValue="https://app.aiello.ch/assets/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://app.aiello.ch/assets/icon-64.png"/>
   <SupportUrl DefaultValue="https://app.aiello.ch/support"/>
@@ -35,8 +35,32 @@
       <Host xsi:type="MailHost">
         <DesktopFormFactor>
           <FunctionFile resid="FunctionFile.Url"/>
+          <!-- Event for new email (optional, for testing) -->
           <ExtensionPoint xsi:type="Events">
             <Event Type="NewMailItemsReceived" FunctionName="onNewEmail"/>
+          </ExtensionPoint>
+          <!-- Ribbon button for manual trigger -->
+          <ExtensionPoint xsi:type="MessageReadCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="msgReadGroup">
+                <Label resid="Group.Label"/>
+                <Control xsi:type="Button" id="msgReadShowTime">
+                  <Label resid="Button.Label"/>
+                  <Supertip>
+                    <Title resid="Button.Title"/>
+                    <Description resid="Button.Desc"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>showTimeDialog</FunctionName>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
           </ExtensionPoint>
         </DesktopFormFactor>
       </Host>
@@ -50,6 +74,14 @@
       <bt:Urls>
         <bt:Url id="FunctionFile.Url" DefaultValue="https://app.aiello.ch/function.js"/>
       </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="Group.Label" DefaultValue="Time Notifier"/>
+        <bt:String id="Button.Label" DefaultValue="Show Time"/>
+        <bt:String id="Button.Title" DefaultValue="Show Current Time"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="Button.Desc" DefaultValue="Displays the current time in a dialog"/>
+      </bt:LongStrings>
     </Resources>
   </VersionOverrides>
 </OfficeApp>

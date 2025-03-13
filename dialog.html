@@ -16,11 +16,12 @@
         <button onclick="Office.context.ui.closeContainer()">Close</button>
     </div>
     <script type="text/javascript">
-        Office.initialize = function() {
+        Office.onReady(function(info) {
+            console.log("Dialog ready: " + JSON.stringify(info));
             const urlParams = new URLSearchParams(window.location.search);
-            const time = urlParams.get('time');
-            document.getElementById('timeDisplay').innerText = 'Time: ' + time;
-        };
+            const time = urlParams.get("time");
+            document.getElementById("timeDisplay").innerText = "Time: " + (time || "Not provided");
+        });
     </script>
 </body>
 </html>
