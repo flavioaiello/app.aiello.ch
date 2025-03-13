@@ -7,8 +7,8 @@
   <Version>1.0.0.0</Version>
   <ProviderName>Contoso</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="Hello world"/>
-  <Description DefaultValue="A simple hello world Office Add-in."/>
+  <DisplayName DefaultValue="Cleanup"/>
+  <Description DefaultValue="Continuous Conversation Cleanup"/>
   <IconUrl DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/assets/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/assets/icon-64.png"/>
   <SupportUrl DefaultValue="https://learn.microsoft.com/office/dev/add-ins/overview/office-add-in-code-samples"/>
@@ -26,7 +26,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/taskpane.html"/>
+        <SourceLocation DefaultValue="https://app.aiello.ch/dialog.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -46,29 +46,9 @@
     <Hosts>
       <Host xsi:type="MailHost">
         <DesktopFormFactor>
-
-          <!-- Message Compose -->
-          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
-            <OfficeTab id="TabDefault">
-              <Group id="msgComposeCmdGroup">
-                <Label resid="CommandsGroup.Label"/>
-                <Control xsi:type="Button" id="msgComposeInsertGist">
-                  <Label resid="TaskpaneButton.Label"/>
-                  <Supertip>
-                    <Title resid="TaskpaneButton.SupertipTitle"/>
-                    <Description resid="TaskpaneButton.SupertipText"/>
-                  </Supertip>
-                  <Icon>
-                    <bt:Image size="16" resid="Icon.16x16"/>
-                    <bt:Image size="32" resid="Icon.32x32"/>
-                    <bt:Image size="80" resid="Icon.80x80"/>
-                  </Icon>
-                  <Action xsi:type="ShowTaskpane">
-                    <SourceLocation resid="Taskpane.Url"/>
-                  </Action>
-                </Control>
-              </Group>
-            </OfficeTab>
+          <FunctionFile resid="FunctionFile"/>
+          <ExtensionPoint xsi:type="Events">
+            <Event Type="NewMailItemsReceived" FunctionName="onNewEmail"/>
           </ExtensionPoint>
         </DesktopFormFactor>
       </Host>
