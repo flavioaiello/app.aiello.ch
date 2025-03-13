@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
-           xmlns:mail="http://schemas.microsoft.com/office/mailapp/1.1"
            xsi:type="MailApp">
-  <Id>1e7e38da-7ad6-429a-9c6f-81aa1b9c9344</Id>
+  <Id>your-unique-guid-here</Id>
   <Version>1.0.0.0</Version>
   <ProviderName>Aiello</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="New Email Time Notifier"/>
-  <Description DefaultValue="Shows current time when new email arrives or on demand"/>
-  <IconUrl DefaultValue="https://app.aiello.ch/assets/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://app.aiello.ch/assets/icon-64.png"/>
-  <SupportUrl DefaultValue="https://app.aiello.ch/support"/>
-  <AppDomains>
-    <AppDomain>https://app.aiello.ch</AppDomain>
-  </AppDomains>
+  <DisplayName DefaultValue="Cleanup"/>
+  <Description DefaultValue="Shows the current time when a new email arrives."/>
+  <IconUrl DefaultValue="https://app.aiello.ch/icon.png"/>
   <Hosts>
     <Host Name="Mailbox"/>
   </Hosts>
@@ -24,64 +17,15 @@
       <Set Name="Mailbox" MinVersion="1.1"/>
     </Sets>
   </Requirements>
-  <Permissions>ReadItem</Permissions>
-  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
-    <Requirements>
-      <bt:Sets DefaultMinVersion="1.12">
-        <bt:Set Name="Mailbox"/>
-      </bt:Sets>
-    </Requirements>
-    <Hosts>
-      <Host xsi:type="MailHost">
-        <DesktopFormFactor>
-          <FunctionFile resid="FunctionFile.Url"/>
-          <!-- Event for new email (optional, for testing) -->
-          <ExtensionPoint xsi:type="Events">
-            <Event Type="NewMailItemsReceived" FunctionName="onNewEmail"/>
-          </ExtensionPoint>
-          <!-- Ribbon button for manual trigger -->
-          <ExtensionPoint xsi:type="MessageReadCommandSurface">
-            <OfficeTab id="TabDefault">
-              <Group id="msgReadGroup">
-                <Label resid="Group.Label"/>
-                <Control xsi:type="Button" id="msgReadShowTime">
-                  <Label resid="Button.Label"/>
-                  <Supertip>
-                    <Title resid="Button.Title"/>
-                    <Description resid="Button.Desc"/>
-                  </Supertip>
-                  <Icon>
-                    <bt:Image size="16" resid="Icon.16x16"/>
-                    <bt:Image size="32" resid="Icon.32x32"/>
-                    <bt:Image size="80" resid="Icon.80x80"/>
-                  </Icon>
-                  <Action xsi:type="ExecuteFunction">
-                    <FunctionName>showTimeDialog</FunctionName>
-                  </Action>
-                </Control>
-              </Group>
-            </OfficeTab>
-          </ExtensionPoint>
-        </DesktopFormFactor>
-      </Host>
-    </Hosts>
-    <Resources>
-      <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://app.aiello.ch/assets/icon-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://app.aiello.ch/assets/icon-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://app.aiello.ch/assets/icon-80.png"/>
-      </bt:Images>
-      <bt:Urls>
-        <bt:Url id="FunctionFile.Url" DefaultValue="https://app.aiello.ch/function.js"/>
-      </bt:Urls>
-      <bt:ShortStrings>
-        <bt:String id="Group.Label" DefaultValue="Time Notifier"/>
-        <bt:String id="Button.Label" DefaultValue="Show Time"/>
-        <bt:String id="Button.Title" DefaultValue="Show Current Time"/>
-      </bt:ShortStrings>
-      <bt:LongStrings>
-        <bt:String id="Button.Desc" DefaultValue="Displays the current time in a dialog"/>
-      </bt:LongStrings>
-    </Resources>
-  </VersionOverrides>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://app.aiello.ch/dialog.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteMailbox</Permissions>
+  <ExtensionPoint xsi:type="Events">
+    <Event Type="OnNewEmail" FunctionExecution="synchronous" FunctionName="onNewEmailHandler"/>
+  </ExtensionPoint>
 </OfficeApp>
