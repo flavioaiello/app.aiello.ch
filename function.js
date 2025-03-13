@@ -2,7 +2,7 @@
     "use strict";
   
     Office.initialize = function(reason) {
-      // Add-in initialization code if needed
+      // No specific initialization needed for this add-in
     };
   
     window.onNewEmail = function(event) {
@@ -14,16 +14,21 @@
           { height: 20, width: 30, displayInIframe: true },
           function(asyncResult) {
             if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-              console.log("Dialog failed: " + asyncResult.error.message);
+              event.completed({ allowEvent: false });
+              return;
             }
+            // Auto-close dialog after 5 seconds
+            setTimeout(() => {
+              if (asyncResult.value) {
+                asyncResult.value.close();
+              }
+            }, 5000);
           }
         );
         
-        event.completed();
+        event.completed({ allowEvent: true });
       } catch (error) {
-        console.log("Error: " + error);
-        event.completed();
+        event.completed({ allowEvent: false });
       }
     };
-  
   })();
