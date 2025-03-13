@@ -4,9 +4,9 @@
            xsi:type="MailApp">
   <Id>your-unique-guid-here</Id>
   <Version>1.0.0.0</Version>
-  <ProviderName>Aiello</ProviderName>
+  <ProviderName>Your Name</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="Cleanup"/>
+  <DisplayName DefaultValue="Time Display Add-in"/>
   <Description DefaultValue="Shows the current time when a new email arrives."/>
   <IconUrl DefaultValue="https://app.aiello.ch/icon.png"/>
   <Hosts>
@@ -20,7 +20,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://app.aiello.ch/dialog.html"/>
+        <SourceLocation DefaultValue="https://app.aiello.ch/addin.html"/>
       </DesktopSettings>
     </Form>
   </FormSettings>

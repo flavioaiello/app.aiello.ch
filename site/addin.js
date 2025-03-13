@@ -1,4 +1,3 @@
-// addin.js
 (function () {
   Office.onReady(function () {
     // Add-in is initialized, but event handling is defined in the manifest
