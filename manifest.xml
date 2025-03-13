@@ -1,84 +1,65 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
-  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.1"
-  xsi:type="MailApp">
-  <Id>F4C23D2A-8198-4D74-8BCB-4E55918BEAEA</Id>
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:mail="http://schemas.microsoft.com/office/mailapp/1.1"
+           xsi:type="MailApp">
+  <Id>your-unique-guid-here</Id>
   <Version>1.0.0.0</Version>
-  <ProviderName>Flavio Aiello</ProviderName>
-  <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="leaner" />
-  <Description DefaultValue="Archives redundant emails based on In-Reply-To headers." />
-  <IconUrl DefaultValue="https://app.aiello.ch/assets/icon-32.png" />
-  <HighResolutionIconUrl DefaultValue="https://app.aiello.ch/assets/icon-64.png" />
-  <SupportUrl DefaultValue="https://github.com/flavioaiello/app.aiello.ch/issues" />
+  <ProviderName>Your Name</ProviderName>
+  <DefaultLocale>en-us</DefaultLocale>
+  <DisplayName DefaultValue="New Email Time Notifier"/>
+  <Description DefaultValue="Shows current time when new email arrives"/>
+  <IconUrl DefaultValue="https://app.aiello.ch/assets/icon-64.png"/>
+  <SupportUrl DefaultValue="https://your-support-site.com"/>
   <AppDomains>
     <AppDomain>https://app.aiello.ch</AppDomain>
   </AppDomains>
   <Hosts>
-    <Host Name="Mailbox" />
+    <Host Name="Mailbox"/>
   </Hosts>
   <Requirements>
     <Sets>
-      <Set Name="Mailbox" MinVersion="1.11" />
+      <Set Name="Mailbox" MinVersion="1.1"/>
     </Sets>
   </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://app.aiello.ch/index.html"/>
+        <RequestedHeight>250</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
   <Permissions>ReadWriteMailbox</Permissions>
-  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" 
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+  </Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides"
                     xsi:type="VersionOverridesV1_0">
-    <Requirements>
-      <bt:Sets DefaultMinVersion="1.11">
-        <bt:Set Name="Mailbox" />
-      </bt:Sets>
-    </Requirements>
-    <Hosts>
-      <Host xsi:type="MailHost">
-        <DesktopFormFactor>
-          <FunctionFile resid="Functions.Url" />
-          <ExtensionPoint xsi:type="Events">
-            <Event Type="OnNewMessageReceived" FunctionName="onNewMessageReceived" />
-          </ExtensionPoint>
-        </DesktopFormFactor>
-      </Host>
-    </Hosts>
-    <Resources>
-      <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://app.aiello.ch/assets/icon-16.png" />
-        <bt:Image id="Icon.32x32" DefaultValue="https://app.aiello.ch/assets/icon-32.png" />
-        <bt:Image id="Icon.80x80" DefaultValue="https://app.aiello.ch/assets/icon-80.png" />
-      </bt:Images>
-      <bt:Urls>
-        <bt:Url id="Functions.Url" DefaultValue="https://app.aiello.ch/functions.js" />
-      </bt:Urls>
-    </Resources>
-  </VersionOverrides>
-  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" 
-                    xsi:type="VersionOverridesV1_1">
-    <Requirements>
-      <bt:Sets DefaultMinVersion="1.11">
-        <bt:Set Name="Mailbox" />
-      </bt:Sets>
-    </Requirements>
-    <Hosts>
-      <Host xsi:type="MailHost">
-        <DesktopFormFactor>
-          <FunctionFile resid="Functions.Url" />
-          <ExtensionPoint xsi:type="Events">
-            <Event Type="OnNewMessageReceived" FunctionName="onNewMessageReceived" />
-          </ExtensionPoint>
-        </DesktopFormFactor>
-      </Host>
-    </Hosts>
-    <Resources>
-      <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://app.aiello.ch/assets/icon-16.png" />
-        <bt:Image id="Icon.32x32" DefaultValue="https://app.aiello.ch/assets/icon-32.png" />
-        <bt:Image id="Icon.80x80" DefaultValue="https://app.aiello.ch/assets/icon-80.png" />
-      </bt:Images>
-      <bt:Urls>
-        <bt:Url id="Functions.Url" DefaultValue="https://app.aiello.ch/functions.js" />
-      </bt:Urls>
-    </Resources>
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1"
+                      xsi:type="VersionOverridesV1_1">
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.12">
+          <bt:Set Name="Mailbox"/>
+        </bt:Sets>
+      </Requirements>
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <DesktopFormFactor>
+            <FunctionFile resid="functionFile"/>
+            <ExtensionPoint xsi:type="Events">
+              <Event Type="ItemChanged" FunctionName="onNewEmail"/>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+      <Resources>
+        <bt:Urls>
+          <bt:Url id="functionFile" DefaultValue="https://app.aiello.ch/function.js"/>
+        </bt:Urls>
+      </Resources>
+    </VersionOverrides>
   </VersionOverrides>
 </OfficeApp>
