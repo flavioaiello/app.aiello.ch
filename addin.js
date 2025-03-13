@@ -10,7 +10,7 @@ function onNewEmailHandler(event) {
 
   // Display a dialog box with the current time
   Office.context.ui.displayDialogAsync(
-    'https://yourdomain.com/dialog.html?time=' + encodeURIComponent(currentTime),
+    'https://app.aiello.ch/dialog.html?time=' + encodeURIComponent(currentTime),
     { height: 30, width: 20 },
     function (result) {
       if (result.status === Office.AsyncResultStatus.Failed) {
