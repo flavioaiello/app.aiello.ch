@@ -5,17 +5,18 @@ Office.onReady((info) => {
     }
 });
 
-function iterateEmails() {
+function findReplyEmails() {
     try {
         const mailbox = Office.context.mailbox;
-        
-        // Get access token for REST API
+        document.getElementById('results').textContent = 'Searching...';
+
+        // Get access token
         mailbox.getCallbackTokenAsync({ isRest: true }, function(result) {
             if (result.status === Office.AsyncResultStatus.Succeeded) {
                 const accessToken = result.value;
                 const restUrl = Office.context.mailbox.restUrl + 
                     "/v2.0/me/MailFolders/Inbox/messages?$top=100&$select=Subject,InReplyTo";
-                
+
                 // Fetch emails
                 fetch(restUrl, {
                     method: 'GET',
@@ -27,41 +28,50 @@ function iterateEmails() {
                 .then(response => response.json())
                 .then(data => {
                     const emails = data.value;
-                    const resultsDiv = document.getElementById('results');
-                    resultsDiv.innerHTML = ''; // Clear previous results
-                    
-                    // Filter emails with In-Reply-To header
                     const replyEmails = emails.filter(email => email.inReplyTo !== null && email.inReplyTo !== undefined);
                     
-                    if (replyEmails.length === 0) {
-                        resultsDiv.textContent = 'No reply emails found in the first 100 inbox messages.';
-                        console.log('No reply emails found');
-                        return;
-                    }
-                    
-                    // Display results
-                    replyEmails.forEach((email, index) => {
-                        const inReplyTo = email.inReplyTo;
-                        console.log(`Reply Email ${index + 1}: ${email.subject} (In-Reply-To: ${inReplyTo})`);
-                        const emailDiv = document.createElement('div');
-                        emailDiv.textContent = `${index + 1}. ${email.subject} (In-Reply-To: ${inReplyTo})`;
-                        resultsDiv.appendChild(emailDiv);
+                    // Prepare dialog options
+                    const dialogUrl = 'https://your-domain.com/dialog.html'; // Update to your hosted dialog.html URL
+                    const dialogOptions = {
+                        width: 30,
+                        height: 40,
+                        displayInIframe: true
+                    };
+
+                    // Open dialog and send email data
+                    Office.context.ui.displayDialogAsync(dialogUrl, dialogOptions, function(asyncResult) {
+                        if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+                            const dialog = asyncResult.value;
+                            dialog.addEventHandler(Office.EventType.DialogMessageReceived, function(event) {
+                                dialog.close();
+                                document.getElementById('results').textContent = 'Dialog closed.';
+                            });
+                            
+                            // Send email data to dialog
+                            const emailData = replyEmails.map(email => ({
+                                subject: email.subject,
+                                inReplyTo: email.inReplyTo
+                            }));
+                            dialog.messageChild(JSON.stringify({ emails: emailData }));
+                            
+                            document.getElementById('results').textContent = 
+                                `Found ${replyEmails.length} reply emails. Check the dialog.`;
+                        } else {
+                            console.error('Dialog failed to open:', asyncResult.error);
+                            document.getElementById('results').textContent = 'Error: Could not open dialog';
+                        }
                     });
-                    
-                    console.log(`Total reply emails found: ${replyEmails.length}`);
                 })
                 .catch(error => {
                     console.error('Error fetching emails:', error);
-                    document.getElementById('results').textContent = 
-                        'Error: Could not fetch emails';
+                    document.getElementById('results').textContent = 'Error: Could not fetch emails';
                 });
             } else {
                 console.error('Failed to get access token:', result.error);
             }
         });
     } catch (error) {
-        console.error('Error in iterateEmails:', error);
-        document.getElementById('results').textContent = 
-            'Error: Something went wrong';
+        console.error('Error in findReplyEmails:', error);
+        document.getElementById('results').textContent = 'Error: Something went wrong';
     }
 }

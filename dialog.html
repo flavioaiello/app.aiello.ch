@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Reply Emails</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 10px; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 5px 0; }
+        button { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h3>Emails with In-Reply-To Headers</h3>
+    <div id="emailList"></div>
+    <button onclick="window.close()">Close</button>
+    <script>
+        // Listen for message from parent
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.emails) {
+                const emailList = document.getElementById('emailList');
+                if (event.data.emails.length === 0) {
+                    emailList.textContent = 'No reply emails found.';
+                } else {
+                    const ul = document.createElement('ul');
+                    event.data.emails.forEach(email => {
+                        const li = document.createElement('li');
+                        li.textContent = `${email.subject} (In-Reply-To: ${email.inReplyTo})`;
+                        ul.appendChild(li);
+                    });
+                    emailList.appendChild(ul);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
